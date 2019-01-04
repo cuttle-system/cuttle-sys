@@ -1,0 +1,34 @@
+$navbar-color: #343a40;
+$secondary: #6c757d;
+
+.editor {
+  height: 100%;
+}
+
+.editor .row {
+  height: 100%;
+}
+
+.source-tree {
+  background-color: lighten($navbar-color, 2);
+  color: $secondary;
+  height: 100%;
+}
+
+.source-view {
+  color: $secondary;
+  background-color: lighten($navbar-color, 1);
+  height: 100%;
+}
+
+.configuration-file {
+  height: 35%;
+  border-bottom: 1px solid $navbar-color;
+  overflow: auto;
+}
+
+.translated-file {
+  height: 65%;
+  border-top: 1px solid $navbar-color;
+  overflow: auto;
+}
