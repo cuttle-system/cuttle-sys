@@ -1,3 +1,4 @@
+// Bootstrap
 @import "~bootstrap/scss/functions";
 @import "variables";
 
@@ -35,10 +36,14 @@
 //@import "~bootstrap/scss/carousel";
 @import "~bootstrap/scss/utilities";
 
-body, html {
+// Codemirror
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/darcula.css";
+
+body, html, .CodeMirror {
   height: 100%;
 }
 
-.tree-type-picker .nav-tabs {
-  text-align: center;
+.editor .row, .source-view {
+  width: 100%;
 }

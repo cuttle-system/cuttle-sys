@@ -1,21 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ConnectionService} from '../connection.service';
 import { faSlidersH, faToolbox, faFile} from '@fortawesome/free-solid-svg-icons';
+import {CodeService} from '../code.service';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.scss']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements OnInit, AfterViewInit {
   private sub: any;
+  loaded = false;
 
   faSlidersH = faSlidersH;
   faToolbox = faToolbox;
   faFile = faFile;
 
-  constructor(public connectionService: ConnectionService, private route: ActivatedRoute) { }
+  constructor(public codeService: CodeService,
+              public connectionService: ConnectionService,
+              private route: ActivatedRoute) { }
+
+  handleResize() {
+    (<HTMLElement>document.querySelector('.editor')).style.height
+      = window.innerHeight - document.querySelector('.navbar').clientHeight + 'px';
+    (<HTMLElement>document.querySelector('.translated-file')).style.height
+      = (<HTMLElement>document.querySelector('.editor')).clientHeight
+      - document.querySelector('.configuration-file').clientHeight - 2 + 'px';
+    // (<HTMLElement>document.querySelector('.editor > .row')).style.width = window.innerWidth + 'px';
+  }
+
+  ngAfterViewInit() {
+    window.addEventListener('resize', () => {
+      this.handleResize();
+    });
+    if (!this.loaded) {
+      this.loaded = true;
+      this.handleResize();
+    }
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {

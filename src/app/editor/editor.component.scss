@@ -3,19 +3,30 @@
 
 $bg-dark: theme-color("dark");
 
-.editor, .editor > .row,
+.editor > .row,
 .source-view, .source-tree {
   height: 100%;
 }
 
-.source-tree {
+.editor > .row {
+  margin: 0;
+}
+
+.editor {
   background-color: lighten($bg-dark, 2);
-  color: $secondary;
+}
+
+.source-tree {
+  //background-color: lighten($bg-dark, 2);
+  //color: $secondary;
+  padding: 0;
 }
 
 .source-view {
   color: $secondary;
-  background-color: lighten($bg-dark, 1);
+  //background-color: lighten($bg-dark, 1);
+  margin: 0;
+  padding: 0;
 }
 
 .configuration-file, .translated-file {
@@ -24,10 +35,11 @@ $bg-dark: theme-color("dark");
 
 .configuration-file {
   height: 35%;
-  border-bottom: 1px solid $bg-dark;
+  //border-bottom: 1px solid $bg-dark;
 }
 
 .translated-file {
   height: 65%;
-  border-top: 1px solid $bg-dark;
+  margin-top: 2px;
+  //border-top: 1px solid $bg-dark;
 }
