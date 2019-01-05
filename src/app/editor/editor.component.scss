@@ -1,34 +1,33 @@
-$navbar-color: #343a40;
-$secondary: #6c757d;
+@import "~bootstrap/scss/functions";
+@import "../../variables";
 
-.editor {
-  height: 100%;
-}
+$bg-dark: theme-color("dark");
 
-.editor .row {
+.editor, .editor > .row,
+.source-view, .source-tree {
   height: 100%;
 }
 
 .source-tree {
-  background-color: lighten($navbar-color, 2);
+  background-color: lighten($bg-dark, 2);
   color: $secondary;
-  height: 100%;
 }
 
 .source-view {
   color: $secondary;
-  background-color: lighten($navbar-color, 1);
-  height: 100%;
+  background-color: lighten($bg-dark, 1);
+}
+
+.configuration-file, .translated-file {
+  overflow: auto;
 }
 
 .configuration-file {
   height: 35%;
-  border-bottom: 1px solid $navbar-color;
-  overflow: auto;
+  border-bottom: 1px solid $bg-dark;
 }
 
 .translated-file {
   height: 65%;
-  border-top: 1px solid $navbar-color;
-  overflow: auto;
+  border-top: 1px solid $bg-dark;
 }
