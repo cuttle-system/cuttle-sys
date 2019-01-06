@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { EditorComponent } from './editor/editor.component';
+import { SessionCreatorComponent } from './session-creator/session-creator.component';
 
 // CodeMirror language rules
 import 'codemirror/mode/javascript/javascript';
@@ -19,7 +20,8 @@ import 'codemirror/mode/php/php';
   declarations: [
     AppComponent,
     NavbarComponent,
-    EditorComponent
+    EditorComponent,
+    SessionCreatorComponent
   ],
   imports: [
     BrowserModule,

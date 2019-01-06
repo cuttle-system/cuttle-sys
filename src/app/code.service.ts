@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Code } from './code';
+import {ConnectionService} from './connection.service';
+import {WebsocketService} from './websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class CodeService {
   };
 
   configurationCodes: Code[] = [
-    {filename: 'foo.cutl', configuration: {mode:  'javascript'}, src: '0if 0get "in_class" 0eq "true" 0do\n' +
+    {path: 'foo.cutl', filename: 'foo.cutl', configuration: {mode:  'javascript'}, src: '0if 0get "in_class" 0eq "true" 0do\n' +
         'this.0pf_methodName0 = function (0ps_args0) {\n' +
         '    0ps_body0\n' +
         '}\n' +
@@ -21,16 +23,17 @@ export class CodeService {
         '    0ps_body0\n' +
         '}\n' +
         '0end'},
-    {filename: 'foo.cutl.cutc', configuration:
+    {path: 'foo.cutl.cutc', filename: 'foo.cutl.cutc', configuration:
         {mode:  'python'}, src: '\'ecmascript\'.5 to \'cutvm-translator-output\'.1'},
-    {filename: 'foo.py.cutc', configuration: {mode:  'python'}, src: '\'python\'.31 to \'php\'.72'},
+    {path: 'foo.py.cutc', filename: 'foo.py.cutc', configuration: {mode:  'python'}, src: '\'python\'.31 to \'php\'.72'},
   ];
+
   translatedCodes: Code[] = [
-    {filename: 'foo.py', configuration: {mode:  'python'}, src: 'x = 1\n' +
+    {path: 'foo.py', filename: 'foo.py', configuration: {mode:  'python'}, src: 'x = 1\n' +
         'if x == 1:\n' +
         '    # indented four spaces\n' +
         '    print("x is 1.")'},
-    {filename: 'bar.js', configuration: {mode:  'javascript'}, src: 'function findSequence(goal) {\n' +
+    {path: 'bar.js', filename: 'bar.js', configuration: {mode:  'javascript'}, src: 'function findSequence(goal) {\n' +
         '  function find(start, history) {\n' +
         '    if (start == goal)\n' +
         '      return history;\n' +
@@ -55,5 +58,13 @@ export class CodeService {
     return {...this.commonConfiguration, ...this.currentTranslatedCode.configuration};
   }
 
-  constructor() { }
+  updateCodeList() {
+
+  }
+
+  updateCodes() {
+
+  }
+
+  constructor(private connectionService: ConnectionService, private websocketService: WebsocketService) { }
 }

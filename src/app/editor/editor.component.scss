@@ -1,8 +1,6 @@
 @import "~bootstrap/scss/functions";
 @import "../../variables";
 
-$bg-dark: theme-color("dark");
-
 .editor > .row,
 .source-view, .source-tree {
   height: 100%;
@@ -10,10 +8,6 @@ $bg-dark: theme-color("dark");
 
 .editor > .row {
   margin: 0;
-}
-
-.editor {
-  background-color: lighten($bg-dark, 2);
 }
 
 .source-tree {

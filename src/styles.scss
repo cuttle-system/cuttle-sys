@@ -44,6 +44,12 @@ body, html, .CodeMirror {
   height: 100%;
 }
 
+$bg-dark: theme-color("dark");
+
+body {
+  background-color: lighten($bg-dark, 2);
+}
+
 .editor .row, .source-view {
   width: 100%;
 }

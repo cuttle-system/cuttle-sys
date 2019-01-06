@@ -3,6 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ConnectionService} from '../connection.service';
 import { faSlidersH, faToolbox, faFile} from '@fortawesome/free-solid-svg-icons';
 import {CodeService} from '../code.service';
+import {WebsocketService} from '../websocket.service';
 
 @Component({
   selector: 'app-editor',
@@ -19,6 +20,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   constructor(public codeService: CodeService,
               public connectionService: ConnectionService,
+              private websocketService: WebsocketService,
               private route: ActivatedRoute) { }
 
   handleResize() {
@@ -27,7 +29,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     (<HTMLElement>document.querySelector('.translated-file')).style.height
       = (<HTMLElement>document.querySelector('.editor')).clientHeight
       - document.querySelector('.configuration-file').clientHeight - 2 + 'px';
-    // (<HTMLElement>document.querySelector('.editor > .row')).style.width = window.innerWidth + 'px';
   }
 
   ngAfterViewInit() {
