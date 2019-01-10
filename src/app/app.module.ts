@@ -15,6 +15,7 @@ import { SessionCreatorComponent } from './session-creator/session-creator.compo
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/php/php';
+import {AngularDraggableModule} from 'angular2-draggable';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import 'codemirror/mode/php/php';
     FontAwesomeModule,
     NgbModule,
     CodemirrorModule,
+    AngularDraggableModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
