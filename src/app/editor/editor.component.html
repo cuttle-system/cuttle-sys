@@ -15,7 +15,14 @@
         <ngb-tab>
           <ng-template ngbTabTitle><fa-icon [icon]="faToolbox"></fa-icon></ng-template>
           <ng-template ngbTabContent>
-            Blocks of configuration code here
+            <div class="draggables">
+              <div class="draggable-item draggable-if-statement" ngDraggable [preventDefaultEvent]="true" [trackPosition]="false" [zIndex]="1000" [zIndexMoving]="99999">
+                <span>if</span>
+              </div>
+              <div class="draggable-item draggable-else-statement" ngDraggable [preventDefaultEvent]="true" [trackPosition]="false" [zIndex]="1000" [zIndexMoving]="99999">
+                <span>else</span>
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
         <ngb-tab>
@@ -32,8 +39,7 @@
     </div>
     <div class="source-view col-sm-10">
       <div class="configuration-file">
-        <codemirror [config]="codeService.getCurrentConfigurationCodeConfig()"
-                    [(ngModel)]="codeService.currentConfigurationCode.src"></codemirror>
+        <app-rules-constructor></app-rules-constructor>
       </div>
       <div class="translated-file">
         <codemirror [config]="codeService.getCurrentTranslatedCodeConfig()"

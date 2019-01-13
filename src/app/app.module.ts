@@ -16,13 +16,15 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/php/php';
 import {AngularDraggableModule} from 'angular2-draggable';
+import { RulesConstructorComponent } from './rules-constructor/rules-constructor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     EditorComponent,
-    SessionCreatorComponent
+    SessionCreatorComponent,
+    RulesConstructorComponent
   ],
   imports: [
     BrowserModule,
