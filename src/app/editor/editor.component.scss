@@ -42,30 +42,8 @@
   text-align: center;
 }
 
-.draggable-item {
-  &:hover {
-    cursor: pointer;
-  }
-
-  background-size: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-
-  width: 40px;
-  line-height: 40px;
-  color: whitesmoke;
-  font-weight: bold;
-  text-align: center;
-
-  margin: 5px;
+app-draggable {
+  height: auto;
+  width: auto;
   display: inline-block;
-  position: relative;
-}
-
-.draggable-if-statement {
-  background-image: url("../../assets/constructor/if-statement.svg");
-}
-
-.draggable-else-statement {
-  background-image: url("../../assets/constructor/else-statement.svg");
 }

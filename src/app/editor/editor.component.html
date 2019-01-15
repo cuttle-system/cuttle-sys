@@ -16,12 +16,8 @@
           <ng-template ngbTabTitle><fa-icon [icon]="faToolbox"></fa-icon></ng-template>
           <ng-template ngbTabContent>
             <div class="draggables">
-              <div class="draggable-item draggable-if-statement" ngDraggable [preventDefaultEvent]="true" [trackPosition]="false" [zIndex]="1000" [zIndexMoving]="99999">
-                <span>if</span>
-              </div>
-              <div class="draggable-item draggable-else-statement" ngDraggable [preventDefaultEvent]="true" [trackPosition]="false" [zIndex]="1000" [zIndexMoving]="99999">
-                <span>else</span>
-              </div>
+              <app-draggable draggableName="if-statement" draggableTitle="if"></app-draggable>
+              <app-draggable draggableName="else-statement" draggableTitle="else"></app-draggable>
             </div>
           </ng-template>
         </ngb-tab>

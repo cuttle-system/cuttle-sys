@@ -15,8 +15,9 @@ import { SessionCreatorComponent } from './session-creator/session-creator.compo
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/php/php';
-import {AngularDraggableModule} from 'angular2-draggable';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { RulesConstructorComponent } from './rules-constructor/rules-constructor.component';
+import { DraggableComponent } from './draggable/draggable.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RulesConstructorComponent } from './rules-constructor/rules-constructor
     NavbarComponent,
     EditorComponent,
     SessionCreatorComponent,
-    RulesConstructorComponent
+    RulesConstructorComponent,
+    DraggableComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,7 @@ import { RulesConstructorComponent } from './rules-constructor/rules-constructor
     FontAwesomeModule,
     NgbModule,
     CodemirrorModule,
-    AngularDraggableModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

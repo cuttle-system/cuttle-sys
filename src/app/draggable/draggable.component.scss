@@ -1,0 +1,32 @@
+.draggable-item {
+  &:hover {
+    cursor: pointer;
+  }
+
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  width: 40px;
+  line-height: 40px;
+  color: whitesmoke;
+  font-weight: bold;
+  text-align: center;
+
+  margin: 5px;
+  display: inline-block;
+  position: relative;
+
+  &.cdk-drag-dragging {
+    z-index: 1000;
+    opacity: .3;
+  }
+}
+
+.draggable-if-statement {
+  background-image: url("../../assets/constructor/if-statement.svg");
+}
+
+.draggable-else-statement {
+  background-image: url("../../assets/constructor/else-statement.svg");
+}

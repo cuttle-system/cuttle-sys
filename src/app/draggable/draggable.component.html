@@ -1,0 +1,8 @@
+<div class="draggable-item draggable-{{ draggableName }}" cdkDrag
+     [class.dragging]="dragging"
+     (cdkDragMoved)="onMoved($event)"
+     (cdkDragStarted)="onStarted($event)"
+     (cdkDragEntered)="onEntered($event)"
+     (cdkDragEnded)="onEnded($event)">
+  <span>{{ draggableTitle }}</span>
+</div>
