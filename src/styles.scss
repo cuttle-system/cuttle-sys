@@ -54,15 +54,17 @@ body {
   width: 100%;
 }
 
+/** Draggables
+ */
 span.draggable-constructor-selected-before,
 span.draggable-constructor-selected-after {
-  border-radius: 5px;
+  //border-radius: 5px;
 }
 
 span.draggable-constructor-selected-before {
-  border-left: 2px solid lightcoral;
+  //border-left: 2px dashed darken($secondary, 5%);
 }
 
 span.draggable-constructor-selected-after {
-  border-right: 2px solid lightcoral;
+  border-right: 4px dotted lightcoral;
 }
