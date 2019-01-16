@@ -1,2 +1,3 @@
-<codemirror [config]="codeService.getCurrentConfigurationCodeConfig()"
-            [(ngModel)]="codeService.currentConfigurationCode.src"></codemirror>
+<ngx-codemirror id="configurationCodeEditor"
+  [options]="codeService.getCurrentConfigurationCodeConfig()"
+  [(ngModel)]="codeService.currentConfigurationCode.src"></ngx-codemirror>

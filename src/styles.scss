@@ -53,3 +53,16 @@ body {
 .editor .row, .source-view {
   width: 100%;
 }
+
+span.draggable-constructor-selected-before,
+span.draggable-constructor-selected-after {
+  border-radius: 5px;
+}
+
+span.draggable-constructor-selected-before {
+  border-left: 2px solid lightcoral;
+}
+
+span.draggable-constructor-selected-after {
+  border-right: 2px solid lightcoral;
+}

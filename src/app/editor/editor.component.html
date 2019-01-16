@@ -38,8 +38,8 @@
         <app-rules-constructor></app-rules-constructor>
       </div>
       <div class="translated-file">
-        <codemirror [config]="codeService.getCurrentTranslatedCodeConfig()"
-                    [(ngModel)]="codeService.currentTranslatedCode.src"></codemirror>
+        <ngx-codemirror [options]="codeService.getCurrentTranslatedCodeConfig()"
+                    [(ngModel)]="codeService.currentTranslatedCode.src"></ngx-codemirror>
       </div>
     </div>
   </div>
