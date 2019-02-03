@@ -1,6 +1,8 @@
+import {Src} from './src';
+
 export class Code {
   path: string;
   configuration: object;
-  src: string;
+  srcs: Src[];
   filename: string;
 }

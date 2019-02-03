@@ -1,4 +1,5 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {CodeService} from '../code.service';
 
 @Component({
   selector: 'app-draggable',
@@ -9,8 +10,9 @@ export class DraggableComponent implements OnInit {
   @Input() draggableName: String;
   @Input() draggableTitle: String;
   dragging = false;
+  private found: { distance: number; sourceCodeIndex: number; element: any } = null;
 
-  constructor(private el: ElementRef) { }
+  constructor(private codeService: CodeService, private el: ElementRef) { }
 
   ngOnInit() {}
 
@@ -45,57 +47,124 @@ export class DraggableComponent implements OnInit {
     });
   }
 
+  findAncestor(el, cls) {
+    while (el && (el = el.parentElement) && !el.classList.contains(cls));
+    return el;
+  }
+
   checkPlaces(elementCoords) {
     let closestElement = null;
+    let placeElementPart = null;
     let minDistance = Number.MAX_VALUE;
-    // console.log(document.querySelectorAll(':hover'));
-    // console.log(document.elementsFromPoint(elementCoords.x, elementCoords.y));
+    let sourceCode = '';
+    let sourceCodeIndex = -1;
+    let codeMirrorElement = null;
+    let codeMirrorLine = null;
+    let savedSourceCode = '';
+
     document.querySelectorAll('app-rules-constructor .CodeMirror-line > span > span').forEach(placeElement => {
+      const currentCodeMirrorElement = this.findAncestor(placeElement, 'CodeMirror');
+      const currentCodeMirrorLine = this.findAncestor(placeElement, 'CodeMirror-line');
+      if (currentCodeMirrorLine !== codeMirrorLine) {
+        if (codeMirrorLine !== null) {
+          sourceCode += '\n';
+        }
+        codeMirrorLine = currentCodeMirrorLine;
+      }
+      if (currentCodeMirrorElement !== codeMirrorElement) {
+        codeMirrorElement = currentCodeMirrorElement;
+        codeMirrorLine = null;
+        sourceCode = '';
+      }
       const coords = <DOMRect>placeElement.getBoundingClientRect();
-      const distance = Math.hypot(coords.x - Number(elementCoords.x), coords.y - Number(elementCoords.y));
-      // const distance = Math.hypot(coords.x - Number(elementCoords.x), coords.y - Number(elementCoords.y));
+      const left_distance = Math.hypot(coords.x - Number(elementCoords.x), coords.y - Number(elementCoords.y));
+      const right_distance = Math.hypot(
+        coords.x + coords.width - Number(elementCoords.x), coords.y + coords.height - Number(elementCoords.y));
 
       placeElement.classList.remove('draggable-constructor-selected-before');
       placeElement.classList.remove('draggable-constructor-selected-after');
-      if (minDistance > distance) {
-        minDistance = distance;
+      if (minDistance > left_distance) {
+        minDistance = left_distance;
+        placeElementPart = 'left';
+        sourceCodeIndex = sourceCode.length;
         closestElement = placeElement;
+        savedSourceCode = sourceCode;
+      }
+      sourceCode += placeElement.innerHTML;
+      if (minDistance > right_distance) {
+        minDistance = right_distance;
+        placeElementPart = 'right';
+        sourceCodeIndex = sourceCode.length;
+        closestElement = placeElement;
+        savedSourceCode = sourceCode;
       }
     });
     if (closestElement !== null) {
-      if (closestElement.previousSibling !== null) {
-        closestElement.previousSibling.classList.add('draggable-constructor-selected-after');
+      if (placeElementPart === 'right') {
+        closestElement.classList.add('draggable-constructor-selected-after');
+      } else {
+        closestElement.classList.add('draggable-constructor-selected-before');
+        // closestElement.class
+        // if (closestElement.previousSibling === null) {
+        //   if (closestElement.innerHTML === '') {
+        //     closestElement = closestElement.nextSibling;
+        //   } else {
+        //     const spanElement = document.createElement('span');
+        //     spanElement.innerHTML = '';
+        //     closestElement.parentNode.insertBefore(spanElement, closestElement);
+        //   }
+        // }
+        // closestElement.previousSibling.classList.add('draggable-constructor-selected-before');
       }
-      closestElement.classList.add('draggable-constructor-selected-before');
     }
-    return {element: closestElement, distance: minDistance};
-  }
-
-  onEntered(event) {
-    // console.log('entered: ', event);
+    // console.log('\'' + savedSourceCode + '\'');
+    console.log(sourceCodeIndex);
+    return {element: closestElement, sourceCodeIndex, distance: minDistance};
   }
 
   onMoved(event) {
     const centerCoords = this.getCenterCoords(event.source._rootElement);
     const found = this.checkPlaces(centerCoords);
     if (found.distance < 20) {
-      console.log(found.element);
+      this.found = found;
+      console.log(found);
     }
   }
 
   onStarted(event) {
     this.wrapTextWithSpans();
-    // console.log('started: ', event);
+  }
+
+  resetCodeMirrors() {
+    const codeMirrorContainer = document.querySelector('#configurationCodeEditor');
+    codeMirrorContainer.querySelectorAll('CodeMirror').forEach(codeMirrorElement => {
+      const codeMirror = (codeMirrorElement as any).CodeMirror as any;
+      codeMirror.setValue(codeMirror.getValue());
+      codeMirror.getDoc().undo();
+    });
   }
 
   onEnded(event) {
+    this.resetCodeMirrors();
+    if (this.found.sourceCodeIndex > 0) {
+      const codeMirrorElement = this.findAncestor(this.found.element, 'CodeMirror') as any;
+      const sourceCode = codeMirrorElement.CodeMirror.getValue();
+      console.log(sourceCode.slice(0, this.found.sourceCodeIndex));
+      console.log(this.found);
+      console.log(sourceCode.slice(this.found.sourceCodeIndex));
+      const srcIndex = (this.findAncestor(codeMirrorElement, 'ngx-codemirror') as any).getAttribute('data-src-index');
+      this.codeService.currentConfigurationCode.srcs[srcIndex].code = sourceCode.slice(this.found.sourceCodeIndex);
+      this.codeService.currentConfigurationCode.srcs.splice(srcIndex, 0, {
+        code: sourceCode.slice(0, this.found.sourceCodeIndex),
+        codeMirror: true});
+      codeMirrorElement.CodeMirror.setValue(sourceCode.slice(this.found.sourceCodeIndex));
+    }
+    this.resetCodeMirrors();
+
     event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
     const source: any = event.source;
     source._passiveTransform = { x: 0, y: 0 }; // make it so new drag starts from same origin
-    const codeMirror = document.querySelector('#configurationCodeEditor .CodeMirror').CodeMirror;
-    codeMirror.setValue(codeMirror.getValue());
-    codeMirror.getDoc().undo();
-    console.log();
+    this.found = null;
   }
 
 }

@@ -35,11 +35,11 @@
     </div>
     <div class="source-view col-sm-10">
       <div class="configuration-file">
-        <app-rules-constructor></app-rules-constructor>
+        <app-rules-constructor class="app-rules-constructor"></app-rules-constructor>
       </div>
       <div class="translated-file">
         <ngx-codemirror [options]="codeService.getCurrentTranslatedCodeConfig()"
-                    [(ngModel)]="codeService.currentTranslatedCode.src"></ngx-codemirror>
+                    [(ngModel)]="codeService.currentTranslatedCode.srcs[0].code"></ngx-codemirror>
       </div>
     </div>
   </div>
