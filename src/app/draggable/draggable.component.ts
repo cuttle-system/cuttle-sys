@@ -1,5 +1,6 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {CodeService} from '../code.service';
+import {Draggable} from './draggable';
 
 @Component({
   selector: 'app-draggable',
@@ -139,11 +140,9 @@ export class DraggableComponent implements OnInit {
     if (this.found.sourceCodeIndex > 0) {
       const codeMirrorElement = this.findAncestor(this.found.element, 'CodeMirror') as any;
       const sourceCode = codeMirrorElement.CodeMirror.getValue();
-      console.log(sourceCode.slice(0, this.found.sourceCodeIndex));
-      console.log(this.found);
-      console.log(sourceCode.slice(this.found.sourceCodeIndex));
       const srcIndex = (this.findAncestor(codeMirrorElement, 'ngx-codemirror') as any).getAttribute('data-src-index');
       this.codeService.currentConfigurationCode.srcs[srcIndex].code = sourceCode.slice(this.found.sourceCodeIndex);
+      Draggable.insertDraggable({srcs: this.codeService.currentConfigurationCode.srcs, srcIndex}, this.draggableName);
       this.codeService.currentConfigurationCode.srcs.splice(srcIndex, 0, {
         code: sourceCode.slice(0, this.found.sourceCodeIndex),
         codeMirror: true});

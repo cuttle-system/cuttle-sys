@@ -1,10 +1,10 @@
 <div id="configurationCodeEditor">
   <div *ngFor="let src of codeService.currentConfigurationCode.srcs; index as i">
-    <ngx-codemirror class="ngx-codemirror"
+    <ngx-codemirror class="configuration-codemirror ngx-codemirror"
                     *ngIf="src.codeMirror" [attr.data-src-index]="i"
                     [options]="codeService.getCurrentConfigurationCodeConfig()"
                     [(ngModel)]="src.code"></ngx-codemirror>
-    <span *ngIf="src.ruleMember" [attr.data-src-index]="i"
-          class="draggable-{{ src.class }}">{{ src.code }}</span>
+    <span *ngIf="!src.codeMirror" [attr.data-src-index]="i"
+          class="rule-member {{ src.class }}">{{ src.code }}</span>
   </div>
 </div>

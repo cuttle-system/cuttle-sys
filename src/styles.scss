@@ -68,3 +68,52 @@ span.draggable-constructor-selected-before {
 span.draggable-constructor-selected-after {
   border-right: 4px dotted lightcoral;
 }
+
+
+/** Configuration codeMirror
+ */
+.configuration-codemirror > .CodeMirror {
+  border: 1px solid lightgrey;
+  padding: 2px;
+}
+
+/** Draggables
+  */
+.draggable-item {
+  &:hover {
+    cursor: pointer;
+  }
+
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  width: 40px;
+  line-height: 40px;
+  color: whitesmoke;
+  font-weight: bold;
+  text-align: center;
+
+  margin: 5px;
+  display: inline-block;
+  position: relative;
+
+  &.cdk-drag-dragging {
+    z-index: 1000;
+    opacity: .3;
+  }
+}
+
+.draggable-if-statement {
+  @extend .draggable-item;
+  background-image: url("assets/constructor/if-statement.svg");
+}
+
+.draggable-else-statement {
+  @extend .draggable-item;
+  background-image: url("assets/constructor/else-statement.svg");
+}
+
+.inline-block {
+  display: inline-block;
+}
