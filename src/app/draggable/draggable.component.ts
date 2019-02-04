@@ -99,36 +99,26 @@ export class DraggableComponent implements OnInit {
         savedSourceCode = sourceCode;
       }
     });
-    if (closestElement !== null) {
+    if (closestElement !== null && minDistance < 20) {
       if (placeElementPart === 'right') {
         closestElement.classList.add('draggable-constructor-selected-after');
       } else {
         closestElement.classList.add('draggable-constructor-selected-before');
-        // closestElement.class
-        // if (closestElement.previousSibling === null) {
-        //   if (closestElement.innerHTML === '') {
-        //     closestElement = closestElement.nextSibling;
-        //   } else {
-        //     const spanElement = document.createElement('span');
-        //     spanElement.innerHTML = '';
-        //     closestElement.parentNode.insertBefore(spanElement, closestElement);
-        //   }
-        // }
-        // closestElement.previousSibling.classList.add('draggable-constructor-selected-before');
       }
     }
     // console.log('\'' + savedSourceCode + '\'');
-    console.log(sourceCodeIndex);
-    return {element: closestElement, sourceCodeIndex, distance: minDistance};
+    let found = {element: null, sourceCodeIndex: -1, distance: 0};
+    if (minDistance < 20) {
+      found = {element: closestElement, sourceCodeIndex, distance: minDistance};
+      console.log(found);
+    }
+    return found;
   }
 
   onMoved(event) {
     const centerCoords = this.getCenterCoords(event.source._rootElement);
     const found = this.checkPlaces(centerCoords);
-    if (found.distance < 20) {
-      this.found = found;
-      console.log(found);
-    }
+    this.found = found;
   }
 
   onStarted(event) {
