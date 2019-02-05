@@ -29,12 +29,13 @@
 
 .configuration-file {
   height: 65%;
+  box-shadow: 2px 5px 10px 1px #1d1d1d;
   //border-bottom: 1px solid $bg-dark;
 }
 
 .translated-file {
   height: 35%;
-  margin-top: 2px;
+  box-shadow: 4px 1px 15px 1px #1d1d1d;
   //border-top: 1px solid $bg-dark;
 }
 
