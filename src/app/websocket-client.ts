@@ -3,12 +3,20 @@ export class WebsocketClient {
   private isConnected = false;
   private messageQueue: string[] = [];
   private callbacks = {};
+  private handlers = {};
 
   private addMessageCallback(type: string, callback) {
     if (typeof this.callbacks[type] === 'undefined') {
       this.callbacks[type] = [];
     }
     this.callbacks[type].push(callback);
+  }
+
+  addMessageHandler(type: string, callback) {
+    if (typeof this.handlers[type] === 'undefined') {
+      this.handlers[type] = [];
+    }
+    this.handlers[type].push(callback);
   }
 
   sendMessage(type: string, message: object, callback): void {
@@ -49,24 +57,12 @@ export class WebsocketClient {
         }
         this.callbacks[json.type] = [];
       }
-      // if (json.type === 'color') {
-      //   myColor = json.data;
-      //   status.innerText = myName + ': ';
-      //   status.style.color = myColor;
-      //   input.removeAttribute('disabled');
-      //   input.focus();
-      // } else if (json.type === 'history') { // entire message history
-      //   for (let i = 0; i < json.data.length; i++) {
-      //     addMessage(json.data[i].author, json.data[i].text,
-      //       json.data[i].color, new Date(json.data[i].time));
-      //   }
-      // } else if (json.type === 'message') { // it's a single message
-      //   input.removeAttribute('disabled');
-      //   addMessage(json.data.author, json.data.text,
-      //     json.data.color, new Date(json.data.time));
-      // } else {
-      //   console.log('Hmm..., I\'ve never seen JSON like this:', json);
-      // }
+      if (typeof this.handlers[json.type] !== 'undefined') {
+        for (const handler of this.handlers[json.type]) {
+          handler(json);
+        }
+        this.handlers[json.type] = [];
+      }
     } catch (e) {
       console.error(e);
       console.log('Invalid JSON: ', message.data);

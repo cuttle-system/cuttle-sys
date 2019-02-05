@@ -12,7 +12,17 @@ export class WebsocketService {
     this.client.sendMessage(type, message, callback);
   }
 
+  onMessageRecieved(type: string, callback) {
+    this.client.addMessageHandler(type, callback);
+  }
+
+  private errorMessageHandler(json) {
+    console.log('An error occurred');
+    console.log(json);
+  }
+
   constructor() {
     this.client = new WebsocketClient(environment.websocketUrl);
+    this.client.addMessageHandler('error', this.errorMessageHandler);
   }
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Code } from './code';
 import {ConnectionService} from './connection.service';
 import {WebsocketService} from './websocket.service';
+import {of} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,11 @@ export class CodeService {
     theme: 'darcula',
     lineNumbers: true,
   };
+
+  silentOperation = false;
+
+  configurationCodesList: string[] = [];
+  translatedCodesList: string[] = [];
 
   configurationCodes: Code[] = [
     {path: 'foo.cutl', filename: 'foo.cutl', configuration: {mode:  'javascript'}, srcs: [{
@@ -73,13 +79,51 @@ export class CodeService {
     return {...this.commonConfiguration, ...this.currentTranslatedCode.configuration};
   }
 
-  updateCodeList() {
-
+  updateCodeList(json) {
+    console.log('updateCodeList');
+    console.log(json);
+    this.configurationCodesList = json.filesList.configurationFilesList;
+    this.translatedCodesList = json.filesList.translatedFilesList;
   }
 
-  updateCodes() {
-
+  updateCodes(json) {
+    console.log('updateCode');
+    console.log(json);
   }
 
-  constructor(private connectionService: ConnectionService, private websocketService: WebsocketService) { }
+  private onConfigurationCodesChanged(currentConfigurationCode: Code) {
+    if (!this.silentOperation && typeof this.websocketService !== 'undefined') {
+      this.websocketService.sendMessage('updateFiles', {
+        files: {
+          configurationFiles: [
+            currentConfigurationCode
+          ]
+        }
+      }, () => {});
+    } else {
+      this.silentOperation = false;
+    }
+  }
+
+  private onTranslatedCodesChanged(translatedCodes: Code) {
+    if (!this.silentOperation && typeof this.websocketService !== 'undefined') {
+      this.websocketService.sendMessage('updateFiles', {
+        files: {
+          translatedFiles: [
+            translatedCodes
+          ]
+        }
+      }, () => {});
+    } else {
+      this.silentOperation = false;
+    }
+  }
+
+  constructor(private connectionService: ConnectionService, private websocketService: WebsocketService) {
+    websocketService.onMessageRecieved('getFilesList', this.updateCodeList);
+    websocketService.onMessageRecieved('getFiles', this.updateCodes);
+
+    of(this.currentConfigurationCode).subscribe(this.onConfigurationCodesChanged);
+    of(this.currentTranslatedCode).subscribe(this.onTranslatedCodesChanged);
+  }
 }
