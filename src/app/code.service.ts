@@ -13,7 +13,8 @@ export class CodeService {
     lineNumbers: true,
   };
 
-  silentOperation = false;
+  silentConfigurationCodesChangedOperation = true;
+  silentTranslatedCodesChangedOperation = true;
 
   configurationCodesList: string[] = [];
   translatedCodesList: string[] = [];
@@ -69,31 +70,55 @@ export class CodeService {
   ];
 
   currentConfigurationCode: Code = this.configurationCodes[0];
-  currentTranslatedCode: Code = this.translatedCodes[0];
+  // currentConfigurationCode: Code = null;
+  currentTranslatedCode: Code = null;
 
   getCurrentConfigurationCodeConfig(): object {
     return {...this.commonConfiguration, ...this.currentConfigurationCode.configuration};
   }
 
   getCurrentTranslatedCodeConfig(): object {
+    if (this.currentTranslatedCode === null) {
+      return this.commonConfiguration;
+    }
     return {...this.commonConfiguration, ...this.currentTranslatedCode.configuration};
   }
 
+  setTranslatedCode(name) {
+    this.websocketService.sendMessage('getFiles', {
+      connectionId: this.connectionService.connectionId,
+      filesList: {
+        translatedFiles: [name],
+        configurationFiles: []
+      }
+    }, json => {
+      this.currentTranslatedCode = json.files.translatedFiles[0];
+    });
+  }
+
+  setConfigurationCode(name) {
+    // this.currentConfigurationCode =
+  }
+
   updateCodeList(json) {
-    console.log('updateCodeList');
-    console.log(json);
     this.configurationCodesList = json.filesList.configurationFilesList;
     this.translatedCodesList = json.filesList.translatedFilesList;
+    if (this.currentConfigurationCode === null) {
+      this.setConfigurationCode(this.configurationCodesList[0]);
+    }
+    if (this.currentTranslatedCode === null) {
+       this.setTranslatedCode(this.translatedCodesList[0]);
+    }
   }
 
   updateCodes(json) {
-    console.log('updateCode');
-    console.log(json);
+    console.log('updateCode: ', json);
   }
 
   private onConfigurationCodesChanged(currentConfigurationCode: Code) {
-    if (!this.silentOperation && typeof this.websocketService !== 'undefined') {
+    if (!this.silentConfigurationCodesChangedOperation && typeof this.websocketService !== 'undefined') {
       this.websocketService.sendMessage('updateFiles', {
+        connectionId: this.connectionService.connectionId,
         files: {
           configurationFiles: [
             currentConfigurationCode
@@ -101,29 +126,30 @@ export class CodeService {
         }
       }, () => {});
     } else {
-      this.silentOperation = false;
+      this.silentConfigurationCodesChangedOperation = false;
     }
   }
 
-  private onTranslatedCodesChanged(translatedCodes: Code) {
-    if (!this.silentOperation && typeof this.websocketService !== 'undefined') {
+  private onTranslatedCodesChanged(currentTranslatedCode: Code) {
+    if (!this.silentTranslatedCodesChangedOperation && typeof this.websocketService !== 'undefined') {
       this.websocketService.sendMessage('updateFiles', {
+        connectionId: this.connectionService.connectionId,
         files: {
           translatedFiles: [
-            translatedCodes
+            currentTranslatedCode
           ]
         }
       }, () => {});
     } else {
-      this.silentOperation = false;
+      this.silentTranslatedCodesChangedOperation = false;
     }
   }
 
   constructor(private connectionService: ConnectionService, private websocketService: WebsocketService) {
-    websocketService.onMessageRecieved('getFilesList', this.updateCodeList);
-    websocketService.onMessageRecieved('getFiles', this.updateCodes);
+    websocketService.onMessageReceived('getFilesList', (list) => this.updateCodeList(list));
+    websocketService.onMessageReceived('getFiles', (list) => this.updateCodes(list));
 
-    of(this.currentConfigurationCode).subscribe(this.onConfigurationCodesChanged);
-    of(this.currentTranslatedCode).subscribe(this.onTranslatedCodesChanged);
+    of(this.currentConfigurationCode).subscribe((code) => this.onConfigurationCodesChanged(code));
+    of(this.currentTranslatedCode).subscribe((code) => this.onTranslatedCodesChanged(code));
   }
 }

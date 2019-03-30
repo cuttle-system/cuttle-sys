@@ -5,10 +5,10 @@
         <ngb-tab>
           <ng-template ngbTabTitle><fa-icon [icon]="faSlidersH"></fa-icon></ng-template>
           <ng-template ngbTabContent>
-            <div class="list-group justify-content-center">
-              <a *ngFor="let code of codeService.configurationCodes"
-                 (click)="codeService.currentConfigurationCode = code"
-                 class="list-group-item list-group-item-action list-group-item-dark">{{ code.filename }}</a>
+            <div class="list-group justify-content-center file-code-list">
+              <a *ngFor="let name of codeService.configurationCodesList"
+                 (click)="codeService.setConfigurationCode(name)"
+                 class="list-group-item list-group-item-action list-group-item-dark">{{ name }}</a>
             </div>
           </ng-template>
         </ngb-tab>
@@ -24,10 +24,10 @@
         <ngb-tab>
           <ng-template ngbTabTitle><fa-icon [icon]="faFile"></fa-icon></ng-template>
           <ng-template ngbTabContent>
-            <div class="list-group">
-              <a *ngFor="let code of codeService.translatedCodes"
-                 (click)="codeService.currentTranslatedCode = code"
-                 class="list-group-item list-group-item-action list-group-item-dark">{{ code.filename }}</a>
+            <div class="list-group justify-content-center file-code-list">
+              <a *ngFor="let name of codeService.translatedCodesList"
+                 (click)="codeService.setTranslatedCode(name)"
+                 class="list-group-item list-group-item-action list-group-item-dark">{{ name }}</a>
             </div>
           </ng-template>
         </ngb-tab>
@@ -38,8 +38,9 @@
         <app-rules-constructor class="app-rules-constructor"></app-rules-constructor>
       </div>
       <div class="translated-file">
-        <ngx-codemirror [options]="codeService.getCurrentTranslatedCodeConfig()"
+        <ngx-codemirror *ngIf="codeService.currentTranslatedCode !== null" [options]="codeService.getCurrentTranslatedCodeConfig()"
                     [(ngModel)]="codeService.currentTranslatedCode.srcs[0].code"></ngx-codemirror>
+        <!--<ngx-codemirror *ngIf="codeService.currentTranslatedCode === null" [options]="codeService.getCurrentTranslatedCodeConfig()"></ngx-codemirror>-->
       </div>
     </div>
   </div>

@@ -30,6 +30,7 @@ export class WebsocketClient {
   }
 
   send(message: string): void {
+    console.log('send: ', JSON.parse(message));
     this.connection.send(message);
   }
 
@@ -43,14 +44,13 @@ export class WebsocketClient {
   }
 
   private onError(error): void {
-    console.log('An error occurred');
-    console.log(error);
+    console.log('An internal websocket error occurred: ', error);
   }
 
   private onMessage(message): void {
     try {
       const json = JSON.parse(message.data);
-      console.log(json);
+      console.log('receive: ', json);
       if (typeof this.callbacks[json.type] !== 'undefined') {
         for (const callback of this.callbacks[json.type]) {
           callback(json);

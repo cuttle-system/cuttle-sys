@@ -48,3 +48,11 @@ app-draggable {
   width: auto;
   display: inline-block;
 }
+
+.file-code-list {
+  overflow-y: auto;
+
+  .list-group-item {
+    padding: 1px;
+  }
+}

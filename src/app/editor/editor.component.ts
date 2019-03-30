@@ -24,6 +24,11 @@ export class EditorComponent implements OnInit, AfterViewInit {
               private route: ActivatedRoute) { }
 
   handleResize() {
+    // document.querySelectorAll('.file-code-list').forEach(list => {
+    //   console.log(list);
+    //   console.log('here');
+    //   (<HTMLElement>list).style.height = window.innerHeight - document.querySelector('.navbar').clientHeight - 50 + 'px';
+    // });
     (<HTMLElement>document.querySelector('.editor')).style.height
       = window.innerHeight - document.querySelector('.navbar').clientHeight + 'px';
     (<HTMLElement>document.querySelector('.translated-file')).style.height
