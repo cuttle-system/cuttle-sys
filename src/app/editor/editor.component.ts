@@ -17,6 +17,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
   faSlidersH = faSlidersH;
   faToolbox = faToolbox;
   faFile = faFile;
+  fileCodeListHeight = 0;
 
   constructor(public codeService: CodeService,
               public connectionService: ConnectionService,
@@ -24,11 +25,10 @@ export class EditorComponent implements OnInit, AfterViewInit {
               private route: ActivatedRoute) { }
 
   handleResize() {
-    // document.querySelectorAll('.file-code-list').forEach(list => {
-    //   console.log(list);
-    //   console.log('here');
-    //   (<HTMLElement>list).style.height = window.innerHeight - document.querySelector('.navbar').clientHeight - 50 + 'px';
-    // });
+    this.fileCodeListHeight = window.innerHeight
+      - document.querySelector('.navbar').clientHeight
+      - document.querySelector('.tree-type-picker ul.nav-tabs').clientHeight - 2;
+    console.log(this.fileCodeListHeight);
     (<HTMLElement>document.querySelector('.editor')).style.height
       = window.innerHeight - document.querySelector('.navbar').clientHeight + 'px';
     (<HTMLElement>document.querySelector('.translated-file')).style.height

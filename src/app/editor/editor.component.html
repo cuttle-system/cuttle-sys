@@ -24,10 +24,10 @@
         <ngb-tab>
           <ng-template ngbTabTitle><fa-icon [icon]="faFile"></fa-icon></ng-template>
           <ng-template ngbTabContent>
-            <div class="list-group justify-content-center file-code-list">
+            <div class="list-group file-code-list" [ngStyle]="{'height': fileCodeListHeight + 'px'}">
               <a *ngFor="let name of codeService.translatedCodesList"
                  (click)="codeService.setTranslatedCode(name)"
-                 class="list-group-item list-group-item-action list-group-item-dark">{{ name }}</a>
+                 class="list-group-item list-group-item-action text-center list-group-item-dark">{{ name }}</a>
             </div>
           </ng-template>
         </ngb-tab>

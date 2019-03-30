@@ -50,9 +50,13 @@ app-draggable {
 }
 
 .file-code-list {
-  overflow-y: auto;
+  overflow: auto;
 
   .list-group-item {
     padding: 1px;
+  }
+
+  .list-group-item:hover {
+    cursor: pointer;
   }
 }
