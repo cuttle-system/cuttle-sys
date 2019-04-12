@@ -117,7 +117,7 @@ export class DraggableComponent implements OnInit {
   }
 
   onMoved(event) {
-    const centerCoords = this.getCenterCoords(event.source._rootElement);
+    const centerCoords = this.getCenterCoords(event.source.element.nativeElement);
     const found = this.checkPlaces(centerCoords);
     this.found = found;
   }
@@ -136,23 +136,26 @@ export class DraggableComponent implements OnInit {
   }
 
   onEnded(event) {
+    event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
+    const source: any = event.source;
+    source._passiveTransform = { x: 0, y: 0 }; // make it so new drag starts from same origin
+
     this.resetCodeMirrors();
     if (this.found.sourceCodeIndex > 0) {
       const codeMirrorElement = this.findAncestor(this.found.element, 'CodeMirror') as any;
       const sourceCode = codeMirrorElement.CodeMirror.getValue();
-      const srcIndex = (this.findAncestor(codeMirrorElement, 'ngx-codemirror') as any).getAttribute('data-src-index');
-      this.codeService.currentConfigurationCode.srcs[srcIndex].code = sourceCode.slice(this.found.sourceCodeIndex);
-      Draggable.insertDraggable({srcs: this.codeService.currentConfigurationCode.srcs, srcIndex}, this.draggableName);
-      this.codeService.currentConfigurationCode.srcs.splice(srcIndex, 0, {
+      const srcIndex = (this.findAncestor(codeMirrorElement, 'ngx-codemirror') as any).getAttribute('data-src-index').split(',');
+      this.codeService.currentConfigurationCode.lines[srcIndex[0]][srcIndex[1]].code = sourceCode.slice(this.found.sourceCodeIndex);
+      this.codeService.currentConfigurationCode.lines[srcIndex[0]][srcIndex[1]].removable = true;
+      Draggable.insertDraggable({lines: this.codeService.currentConfigurationCode.lines, srcIndex}, this.draggableName);
+      this.codeService.currentConfigurationCode.lines.splice(srcIndex, 0, JSON.parse(JSON.stringify([{
         code: sourceCode.slice(0, this.found.sourceCodeIndex),
-        codeMirror: true});
+        removable: true,
+        codeMirror: true}])));
       codeMirrorElement.CodeMirror.setValue(sourceCode.slice(this.found.sourceCodeIndex));
     }
     this.resetCodeMirrors();
 
-    event.source.element.nativeElement.style.transform = 'none'; // visually reset element to its origin
-    const source: any = event.source;
-    source._passiveTransform = { x: 0, y: 0 }; // make it so new drag starts from same origin
     this.found = null;
   }
 

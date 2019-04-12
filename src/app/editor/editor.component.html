@@ -39,7 +39,7 @@
       </div>
       <div class="translated-file">
         <ngx-codemirror *ngIf="codeService.currentTranslatedCode !== null" [options]="codeService.getCurrentTranslatedCodeConfig()"
-                    [(ngModel)]="codeService.currentTranslatedCode.srcs[0].code"></ngx-codemirror>
+                    [(ngModel)]="codeService.currentTranslatedCode.lines[0][0].code"></ngx-codemirror>
         <!--<ngx-codemirror *ngIf="codeService.currentTranslatedCode === null" [options]="codeService.getCurrentTranslatedCodeConfig()"></ngx-codemirror>-->
       </div>
     </div>

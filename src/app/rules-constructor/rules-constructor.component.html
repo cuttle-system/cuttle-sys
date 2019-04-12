@@ -1,10 +1,28 @@
 <div id="configurationCodeEditor">
-  <div *ngFor="let src of codeService.currentConfigurationCode.srcs; index as i">
-    <ngx-codemirror class="configuration-codemirror ngx-codemirror"
-                    *ngIf="src.codeMirror" [attr.data-src-index]="i"
-                    [options]="codeService.getCurrentConfigurationCodeConfig()"
-                    [(ngModel)]="src.code"></ngx-codemirror>
-    <span *ngIf="!src.codeMirror" [attr.data-src-index]="i"
-          class="rule-member {{ src.class }}">{{ src.code }}</span>
+  <div class="code-editor-line" *ngFor="let line of codeService.currentConfigurationCode.lines; index as lineI">
+    <div class="code-editor-line-member" *ngFor="let src of line; index as i">
+      <div *ngIf="!src.codeMirror" ngbDropdown [placement]="lineI == 0 ? 'right' : 'top'" #draggableDropdown="ngbDropdown" class="draggable-dropdown"
+           (mouseenter)="openDropdown($event, draggableDropdown, src)"
+           (mouseleave)="closeDropdown($event, draggableDropdown, src)">
+        <span id="dropdownBasicDraggable" [attr.data-src-index]="[lineI, i]"
+              class="rule-member {{ src.class }}"
+              ngbDropdownAnchor>{{ src.code }}</span>
+        <div ngbDropdownMenu aria-labelledby="dropdownDraggable">
+          <button ngbDropdownItem class="btn btn-sm" (click)="deleteSrc([lineI, i])"><fa-icon [icon]="faBackspace"></fa-icon></button>
+        </div>
+      </div>
+
+      <div *ngIf="src.codeMirror" ngbDropdown [placement]="lineI == 0 ? 'right' : 'top'" #draggableDropdown="ngbDropdown" class="draggable-dropdown"
+           (mouseenter)="openDropdown($event, draggableDropdown, src)"
+           (mouseleave)="closeDropdown($event, draggableDropdown, src)">
+        <ngx-codemirror id="dropdownCodeMirror" class="configuration-codemirror ngx-codemirror"
+                        [attr.data-src-index]="[lineI, i]"
+                        [options]="codeService.getCurrentConfigurationCodeConfig()"
+                        [(ngModel)]="src.code" ngbDropdownAnchor></ngx-codemirror>
+        <div ngbDropdownMenu aria-labelledby="dropdownCodeMirror">
+          <button ngbDropdownItem class="btn btn-sm" (click)="deleteSrc([lineI, i])"><fa-icon [icon]="faBackspace"></fa-icon></button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

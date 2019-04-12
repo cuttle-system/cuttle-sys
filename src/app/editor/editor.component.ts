@@ -28,7 +28,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
     this.fileCodeListHeight = window.innerHeight
       - document.querySelector('.navbar').clientHeight
       - document.querySelector('.tree-type-picker ul.nav-tabs').clientHeight - 2;
-    console.log(this.fileCodeListHeight);
     (<HTMLElement>document.querySelector('.editor')).style.height
       = window.innerHeight - document.querySelector('.navbar').clientHeight + 'px';
     (<HTMLElement>document.querySelector('.translated-file')).style.height
