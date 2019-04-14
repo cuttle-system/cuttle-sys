@@ -34,16 +34,18 @@ export class RulesConstructorComponent implements OnInit {
   deleteSrc(index: number[]) {
     if (this.codeService.currentConfigurationCode.lines[index[0]][index[1]].codeMirror) {
       if (index[1] === 0) {
-        if (index[0] !== 0) {
+        if (index[0] !== 0
+          && this.codeService.currentConfigurationCode
+              .lines[index[0] - 1][this.codeService.currentConfigurationCode.lines[index[0] - 1].length - 1].codeMirror
+        ) {
           const value = this.codeService.currentConfigurationCode.lines[index[0]][index[1]].code;
           this.codeService.currentConfigurationCode
             .lines[index[0] - 1][this.codeService.currentConfigurationCode.lines[index[0] - 1].length - 1].code += value;
           this.codeService.currentConfigurationCode.lines[index[0]].splice(index[1], 1);
         }
-      } else {
+      } else if (this.codeService.currentConfigurationCode.lines[index[0]][index[1] - 1].codeMirror) {
         const value = this.codeService.currentConfigurationCode.lines[index[0]][index[1]].code;
-        this.codeService.currentConfigurationCode
-          .lines[index[0]][index[1] - 1].code += value;
+        this.codeService.currentConfigurationCode.lines[index[0]][index[1] - 1].code += value;
         this.codeService.currentConfigurationCode.lines[index[0]].splice(index[1], 1);
       }
     } else {
@@ -52,17 +54,6 @@ export class RulesConstructorComponent implements OnInit {
 
     if (this.codeService.currentConfigurationCode.lines[index[0]].length === 0) {
       this.codeService.currentConfigurationCode.lines.splice(index[0], 1);
-      // if (index[0] !== 0
-      //   && this.codeService.currentConfigurationCode.lines.length > index[0]
-      //   && this.codeService.currentConfigurationCode.lines[index[0]][0].codeMirror
-      //   && this.codeService.currentConfigurationCode
-      //     .lines[index[0] - 1][this.codeService.currentConfigurationCode.lines[index[0] - 1].length - 1].codeMirror
-      // ) {
-      //   const after = this.codeService.currentConfigurationCode.lines[index[0]][0].code;
-      //   this.codeService.currentConfigurationCode
-      //     .lines[index[0] - 1][this.codeService.currentConfigurationCode.lines[index[0] - 1].length - 1].code += after;
-      //   this.deleteSrc([index[0], 0]);
-      // }
     }
   }
 }

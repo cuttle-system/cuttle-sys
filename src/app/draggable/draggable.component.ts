@@ -8,8 +8,8 @@ import {Draggable} from './draggable';
   styleUrls: ['./draggable.component.scss']
 })
 export class DraggableComponent implements OnInit {
-  @Input() draggableName: String;
-  @Input() draggableTitle: String;
+  @Input() draggableName: string;
+  @Input() draggableTitle: string;
   dragging = false;
   private found: { distance: number; sourceCodeIndex: number; element: any } = null;
 
@@ -141,21 +141,29 @@ export class DraggableComponent implements OnInit {
     source._passiveTransform = { x: 0, y: 0 }; // make it so new drag starts from same origin
 
     this.resetCodeMirrors();
-    if (this.found.sourceCodeIndex > 0) {
-      const codeMirrorElement = this.findAncestor(this.found.element, 'CodeMirror') as any;
-      const sourceCode = codeMirrorElement.CodeMirror.getValue();
-      const srcIndex = (this.findAncestor(codeMirrorElement, 'ngx-codemirror') as any).getAttribute('data-src-index').split(',');
-      this.codeService.currentConfigurationCode.lines[srcIndex[0]][srcIndex[1]].code = sourceCode.slice(this.found.sourceCodeIndex);
-      this.codeService.currentConfigurationCode.lines[srcIndex[0]][srcIndex[1]].removable = true;
-      Draggable.insertDraggable({lines: this.codeService.currentConfigurationCode.lines, srcIndex}, this.draggableName);
-      this.codeService.currentConfigurationCode.lines.splice(srcIndex, 0, JSON.parse(JSON.stringify([{
+    const codeMirrorElement = this.findAncestor(this.found.element, 'CodeMirror') as any;
+    const sourceCode = codeMirrorElement.CodeMirror.getValue();
+    const srcIndex = (this.findAncestor(codeMirrorElement, 'ngx-codemirror') as any).getAttribute('data-src-index').split(',');
+    this.codeService.currentConfigurationCode.lines[srcIndex[0]][srcIndex[1]].code = sourceCode.slice(this.found.sourceCodeIndex);
+    this.codeService.currentConfigurationCode.lines[srcIndex[0]][srcIndex[1]].removable = true;
+
+    const isLine: boolean = Draggable.insertDraggable(
+      {lines: this.codeService.currentConfigurationCode.lines, srcIndex}, this.draggableName);
+    if (isLine) {
+      this.codeService.currentConfigurationCode.lines.splice(srcIndex[0], 0, JSON.parse(JSON.stringify([{
         code: sourceCode.slice(0, this.found.sourceCodeIndex),
         removable: true,
         codeMirror: true}])));
-      codeMirrorElement.CodeMirror.setValue(sourceCode.slice(this.found.sourceCodeIndex));
+    } else {
+      this.codeService.currentConfigurationCode.lines[srcIndex[0]].splice(srcIndex[1], 0, JSON.parse(JSON.stringify({
+        code: sourceCode.slice(0, this.found.sourceCodeIndex),
+        removable: true,
+        codeMirror: true})));
     }
-    this.resetCodeMirrors();
 
+    codeMirrorElement.CodeMirror.setValue(sourceCode.slice(this.found.sourceCodeIndex));
+
+    this.resetCodeMirrors();
     this.found = null;
   }
 
